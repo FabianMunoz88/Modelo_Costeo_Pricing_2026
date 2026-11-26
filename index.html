@@ -875,11 +875,11 @@ function prog(){const pre=rd('pre'),ps=psubVal();return Object.assign({},cur,{pr
 function isBase(){return Array.from(document.querySelectorAll('input[data-d]')).every(e=>e.value===e.dataset.d)&&$('senaModo').value===G.senaModo&&$('incSC').checked;}
 function draw(id,cfg){if(!window.Chart)return;if(ch[id])ch[id].destroy();ch[id]=new Chart($(id),cfg);}
 function card(t,v,s,c){return '<div class=card style=border-left-color:'+(c||AZ)+'><div class=t>'+t+'</div><div class=v'+(c&&c!==AZ?' style=color:'+c:'')+'>'+v+'</div><div class=s>'+s+'</div></div>';}
-function opts(sel,vals,all){const c=sel.value;const u=Array.from(new Set(vals)).sort((a,b)=>a.localeCompare(b,'es'));sel.innerHTML='';if(all)sel.add(new Option('(Todas)',''));u.forEach(v=>sel.add(new Option(v,v)));if(u.includes(c))sel.value=c;}
-function fill(i){const f=PR.filter(p=>F.slice(0,i).every(k=>String(p[k])===$(k).value));opts($(F[i]),f.map(p=>String(p[F[i]])));}
+const CUL=v=>String(v).replace(/^(COA|CU|CT|CAT|CERES)\s+/i,'').trim();const FV=(p,k)=>k==='cu'?CUL(p[k]):String(p[k]);function opts(sel,vals,all){const c=sel.value;const u=Array.from(new Set(vals)).sort((a,b)=>a.localeCompare(b,'es'));sel.innerHTML='';if(all)sel.add(new Option('(Todas)',''));u.forEach(v=>sel.add(new Option(v,v)));if(u.includes(c))sel.value=c;}
+function fill(i){const f=PR.filter(p=>F.slice(0,i).every(k=>FV(p,k)===$(k).value));opts($(F[i]),f.map(p=>FV(p,F[i])));}
 function cascade(from){for(let i=from;i<F.length;i++)fill(i);onProg();}
-function onProg(){const p=PR.find(x=>F.every(k=>String(x[k])===$(k).value));if(!p)return;loadP(p);render();}
-function selectProg(p){for(let i=0;i<F.length;i++){fill(i);$(F[i]).value=String(p[F[i]]);}onProg();}
+function onProg(){const p=PR.find(x=>F.every(k=>FV(x,k)===$(k).value));if(!p)return;loadP(p);render();}
+function selectProg(p){for(let i=0;i<F.length;i++){fill(i);$(F[i]).value=FV(p,F[i]);}onProg();}
 function render(){
 if(!cur)return;
 const p=prog(),o=sc(cur),r=calc(p,gl(),o),u=r.rows[r.rows.length-1],base=isBase(),c=SC(r.M);
